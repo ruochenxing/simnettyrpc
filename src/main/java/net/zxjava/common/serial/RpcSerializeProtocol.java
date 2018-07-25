@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 抽象出RPC消息序列化，协议类型对象
  */
 public enum RpcSerializeProtocol {
-	JDKSERIALIZE("jdknative"), KRYOSERIALIZE("kryo"), HESSIANSERIALIZE("hessian"), PROTOSTUFFSERIALIZE("protostuff");
+	PROTOSTUFFSERIALIZE("protostuff");
 
 	private String serializeProtocol;
 

@@ -28,7 +28,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 	private String serverAddress;
 	private int echoApiPort;
 	// 默认的序列化采用Java原生本地序列化机制，并且优化了线程池异步调用的层次结构
-	private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.JDKSERIALIZE;
+	private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.PROTOSTUFFSERIALIZE;
 
 	private static final int PARALLEL = RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
 	private static final String DELIMITER = RpcSystemConfig.DELIMITER;
@@ -38,7 +38,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 	EventLoopGroup worker = new NioEventLoopGroup(PARALLEL, threadRpcFactory, SelectorProvider.provider());
 
 	private Map<String, Object> handlerMap = new ConcurrentHashMap<String, Object>();
-	
+
 	private MessageRecvExecutor() {
 		handlerMap.clear();
 	}
@@ -87,7 +87,8 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 	public void start() {
 		ServerBootstrap bootstrap = new ServerBootstrap();
 		bootstrap.group(boss, worker).channel(NioServerSocketChannel.class)
-				.childHandler(new MessageRecvChannelInitializer(handlerMap).buildRpcSerializeProtocol(serializeProtocol))
+				.childHandler(
+						new MessageRecvChannelInitializer(handlerMap).buildRpcSerializeProtocol(serializeProtocol))
 				.option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
 		String[] ipAddress = serverAddress.split(MessageRecvExecutor.DELIMITER);
 		if (ipAddress.length == RpcSystemConfig.IPADDR_OPRT_ARRAY_LENGTH) {
