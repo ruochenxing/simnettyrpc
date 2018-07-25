@@ -1,6 +1,5 @@
 package net.zxjava.client.spring;
 
-import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -13,21 +12,23 @@ import net.zxjava.common.serial.RpcSerializeProtocol;
  * 封装自己定制的实例化逻辑(例如你想用工厂模式来实例化，或者Class.getInstance())，然后让spring统一管理(
  * Spring提供的工厂Bean, 方便)
  */
-public class RpcReference implements FactoryBean<Object>, InitializingBean, DisposableBean {
+public class RpcReference implements FactoryBean<Object>, InitializingBean {
 
 	private String interfaceName;
 	private String ipAddr;
 	private String protocol;
 
-	@Override
-	public void destroy() throws Exception {
-	}
-
+	/**
+	 * 所有的属性被初始化后调用。
+	 */
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		MessageSendExecutor.getInstance().setRpcServerLoader(ipAddr, RpcSerializeProtocol.valueOf(protocol));
 	}
 
+	/**
+	 * ctx.getBean()时调用
+	 */
 	@Override
 	public Object getObject() throws Exception {
 		return MessageSendExecutor.getInstance().execute(getObjectType());
