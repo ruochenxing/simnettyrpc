@@ -9,6 +9,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.alibaba.fastjson.JSONObject;
+
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -29,14 +31,11 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 	private int echoApiPort;
 	// 默认的序列化采用Java原生本地序列化机制，并且优化了线程池异步调用的层次结构
 	private RpcSerializeProtocol serializeProtocol = RpcSerializeProtocol.PROTOSTUFFSERIALIZE;
-
 	private static final int PARALLEL = RpcSystemConfig.SYSTEM_PROPERTY_PARALLEL * 2;
 	private static final String DELIMITER = RpcSystemConfig.DELIMITER;
-
 	ThreadFactory threadRpcFactory = new NamedThreadFactory("NettyRPC ThreadFactory");
 	EventLoopGroup boss = new NioEventLoopGroup();
 	EventLoopGroup worker = new NioEventLoopGroup(PARALLEL, threadRpcFactory, SelectorProvider.provider());
-
 	private Map<String, Object> handlerMap = new ConcurrentHashMap<String, Object>();
 
 	private MessageRecvExecutor() {
@@ -51,10 +50,12 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 		return MessageRecvExecutorHolder.INSTANCE;
 	}
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		// TODO Auto-generated method stub
+	public Map<String, Object> getHandlerMap() {
+		return handlerMap;
+	}
 
+	public void setHandlerMap(Map<String, Object> handlerMap) {
+		this.handlerMap = handlerMap;
 	}
 
 	public String getServerAddress() {
@@ -85,6 +86,7 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 	 * 启动rpc服务器端 启动echo api
 	 */
 	public void start() {
+		System.out.println("MessageRecvExecutor handlerMap = " + JSONObject.toJSONString(handlerMap));
 		ServerBootstrap bootstrap = new ServerBootstrap();
 		bootstrap.group(boss, worker).channel(NioServerSocketChannel.class)
 				.childHandler(
@@ -114,5 +116,11 @@ public class MessageRecvExecutor implements ApplicationContextAware {
 		} else {
 			System.out.printf("RPC Server start fail! ipAddress value error,ipAddress=" + ipAddress);
 		}
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		// TODO Auto-generated method stub
+
 	}
 }

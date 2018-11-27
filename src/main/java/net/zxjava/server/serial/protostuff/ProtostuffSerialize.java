@@ -32,6 +32,7 @@ public class ProtostuffSerialize implements RpcSerialize {
 		this.rpcDirect = rpcDirect;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void serialize(OutputStream output, Object object) throws IOException {
 		Class<?> cls = (Class<?>) object.getClass();
@@ -46,6 +47,7 @@ public class ProtostuffSerialize implements RpcSerialize {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Object deserialize(InputStream input) throws IOException {
 		try {
@@ -59,6 +61,7 @@ public class ProtostuffSerialize implements RpcSerialize {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private static <T> Schema<T> getSchema(Class<T> cls) {
 		return (Schema<T>) cachedSchema.get(cls);
 	}

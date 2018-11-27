@@ -9,4 +9,9 @@ public class RpcSystemConfig {
 	public static final int SERIALIZE_POOL_MAX_WAIT_MILLIS = 5000;
 	public static final int SERIALIZE_POOL_MIN_EVICTABLE_IDLE_TIME_MILLIS = 600000;
 	public static final String FILTER_RESPONSE_MSG = "Illegal request,RPC server refused to respond!";
+
+	public static final int SYSTEM_PROPERTY_THREADPOOL_THREAD_NUMS = Integer.getInteger("nettyrpc.default.thread.nums",
+			16);
+	public static final int SYSTEM_PROPERTY_THREADPOOL_QUEUE_NUMS = Integer.getInteger("nettyrpc.default.queue.nums",
+			-1);
 }

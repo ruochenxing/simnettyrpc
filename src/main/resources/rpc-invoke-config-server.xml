@@ -7,5 +7,11 @@
 	http://www.zxjava.net/nettyrpc http://www.zxjava.net/nettyrpc/nettyrpc.xsd">
 
 	<context:property-placeholder location="classpath:rpc-server.properties" />
-	<nettyrpc:registry id="rpcRegistry" ipAddress="${rpc.server.addr}" echoApiPort="${rpc.server.echo.api.port}" protocol="PROTOSTUFFSERIALIZE"></nettyrpc:registry>
+	<nettyrpc:registry id="rpcRegistry" ipAddress="${rpc.server.addr}"
+		echoApiPort="${rpc.server.echo.api.port}" protocol="PROTOSTUFFSERIALIZE"></nettyrpc:registry>
+
+	<nettyrpc:service id="addCalculate" interfaceName="net.zxjava.service.AddCalculate"
+		ref="addCalculateService"></nettyrpc:service>
+
+	<bean id="addCalculateService" class="net.zxjava.service.impl.AddCalculateImpl"></bean>
 </beans>

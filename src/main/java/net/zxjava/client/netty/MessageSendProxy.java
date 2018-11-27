@@ -21,7 +21,7 @@ public class MessageSendProxy<T> extends AbstractInvocationHandler {
 		request.setTypeParameters(method.getParameterTypes());
 		request.setParametersVal(args);
 		MessageSendHandler handler = RpcServerLoader.getInstance().getMessageSendHandler();
-		handler.sendRequest(request);
-		return null;
+		MessageCallBack callBack = handler.sendRequest(request);
+		return callBack.start();
 	}
 }

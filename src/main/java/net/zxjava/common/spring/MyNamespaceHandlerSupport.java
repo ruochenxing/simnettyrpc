@@ -13,6 +13,7 @@ import com.google.common.io.CharStreams;
 
 import net.zxjava.client.spring.RpcReferenceParser;
 import net.zxjava.server.spring.RpcRegisteryParser;
+import net.zxjava.server.spring.RpcServiceParser;
 
 public class MyNamespaceHandlerSupport extends NamespaceHandlerSupport {
 
@@ -45,5 +46,6 @@ public class MyNamespaceHandlerSupport extends NamespaceHandlerSupport {
 	public void init() {
 		registerBeanDefinitionParser("registry", new RpcRegisteryParser());
 		registerBeanDefinitionParser("reference", new RpcReferenceParser());
+		registerBeanDefinitionParser("service", new RpcServiceParser());
 	}
 }

@@ -2,6 +2,8 @@ package net.zxjava.server.netty;
 
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
+
 import io.netty.channel.ChannelPipeline;
 import net.zxjava.common.serial.RpcSerializeProtocol;
 import net.zxjava.server.serial.protostuff.ProtostuffCodecUtil;
@@ -13,6 +15,7 @@ public class RpcRecvSerializeFrame {
 	private Map<String, Object> handlerMap = null;
 
 	public RpcRecvSerializeFrame(Map<String, Object> handlerMap) {
+		System.out.println("RpcRecvSerializeFrame handlerMap = " + JSONObject.toJSONString(handlerMap));
 		this.handlerMap = handlerMap;
 	}
 
